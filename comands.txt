@@ -1,0 +1,7 @@
+modificar parameters: python3 docopt_c/docopt_c.py src/vad.docopt -o src/vad_docopt.h
+compilar: ninja -C bin
+
+segmentar wav:  bin/vad -i prueba.wav -o prueba.vad
+evaluar segmentación: perl scripts/vad_evaluation.pl prueba.lab
+
+evaluar daatbase: scripts/run_vad.sh

@@ -79,7 +79,7 @@ unsigned int vad_frame_size(VAD_DATA *vad_data) {
  * using a Finite State Automata
  */
 
-VAD_STATE vad(VAD_DATA *vad_data, float *x) {
+VAD_STATE vad(VAD_DATA *vad_data, float *x, float alpha1) {
 
   /* 
    * TODO: You can change this, using your own features,
@@ -96,12 +96,12 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
     break;
 
   case ST_SILENCE:
-    if (f.p > vad_data->power_init + 5)
+    if (f.p > vad_data->power_init + alpha1)
       vad_data->state = ST_VOICE;
     break;
 
   case ST_VOICE:
-    if (f.p < vad_data->power_init + 5)
+    if (f.p < vad_data->power_init + alpha1)
       vad_data->state = ST_SILENCE;
     break;
 

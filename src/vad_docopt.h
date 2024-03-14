@@ -16,8 +16,8 @@ typedef struct {
     int verbose;
     int version;
     /* options with arguments */
+    char *alpha1;
     char *input_wav;
-    char *llindar1;
     char *output_vad;
     char *output_wav;
     /* special */
@@ -37,7 +37,7 @@ const char help_message[] =
 "   -i FILE, --input-wav=FILE   WAVE file for voice activity detection\n"
 "   -o FILE, --output-vad=FILE  Label file with the result of VAD\n"
 "   -w FILE, --output-wav=FILE  WAVE file with silences cleared\n"
-"   -1, --llindar1 REAL=llindar1 de decisió veu/silenci potència [default: -30] \n"
+"   -1, REAL, --alpha1 REAL   alpha1 decisio veu silenci [default: 5]\n"
 "   -v, --verbose  Show debug information\n"
 "   -h, --help     Show this screen\n"
 "   --version      Show the version of the project\n"
@@ -272,12 +272,12 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
             args->verbose = option->value;
         } else if (!strcmp(option->olong, "--version")) {
             args->version = option->value;
+        } else if (!strcmp(option->olong, "--alpha1")) {
+            if (option->argument)
+                args->alpha1 = option->argument;
         } else if (!strcmp(option->olong, "--input-wav")) {
             if (option->argument)
                 args->input_wav = option->argument;
-        } else if (!strcmp(option->olong, "--llindar1")) {
-            if (option->argument)
-                args->llindar1 = option->argument;
         } else if (!strcmp(option->olong, "--output-vad")) {
             if (option->argument)
                 args->output_vad = option->argument;
@@ -304,7 +304,7 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
 
 DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
     DocoptArgs args = {
-        0, 0, 0, NULL, NULL, NULL, NULL,
+        0, 0, 0, (char*) "5", NULL, NULL, NULL,
         usage_pattern, help_message
     };
     Tokens ts;
@@ -316,8 +316,8 @@ DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
         {"-h", "--help", 0, 0, NULL},
         {"-v", "--verbose", 0, 0, NULL},
         {NULL, "--version", 0, 0, NULL},
+        {"-1", "--alpha1", 1, 0, NULL},
         {"-i", "--input-wav", 1, 0, NULL},
-        {"-30]", "--llindar1", 1, 0, NULL},
         {"-o", "--output-vad", 1, 0, NULL},
         {"-w", "--output-wav", 1, 0, NULL}
     };
