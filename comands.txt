@@ -6,9 +6,13 @@ evaluar segmentación: perl scripts/vad_evaluation.pl prueba.lab
 
 evaluar daatbase: scripts/run_vad.sh
 
+<<<<<<< Updated upstream
 por terminal:
     for alpha1 in $(seq 4 0.1 5); do
     > echo -n "$alpha1: "
     > scripts/run_vad.sh $alpha1 | grep TOTAL
     > done | sort -t : -k 3nr
 
+=======
+no
+>>>>>>> Stashed changes
