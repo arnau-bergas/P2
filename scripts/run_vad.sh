@@ -3,6 +3,9 @@
 # Be sure that this file has execution permissions:
 # Use the nautilus explorer or chmod +x run_vad.sh
 
+# Assigning alpha1 argument to a variable
+alpha1=${1:-5}
+
 # Establecemos que el código de retorno de un pipeline sea el del último programa con código de retorno
 # distinto de cero, o cero si todos devuelven cero.
 set -o pipefail
@@ -21,8 +24,7 @@ for filewav in $DB/*/*wav; do
     fi
 
     filevad=${filewav/.wav/.vad}
-
-    $CMD -i $filewav -o $filevad || exit 1
+    $CMD -i $filewav -o $filevad -1 $alpha1 || exit 1  
 
 # Alternatively, uncomment to create output wave files
 #    filewavOut=${filewav/.wav/.vad.wav}
