@@ -142,9 +142,16 @@ Ejercicios
 	* Incremento del nivel potencia en dB, respecto al nivel correspondiente al silencio inicial, para
 	  estar seguros de que un segmento de señal se corresponde con voz.
 
+	  Observem que un valor típic seria d'un augment d'almenys 10 dB, però per estar segurs escollirem un llindar de 15 dB per decidir que es tracta de veu.
+
 	* Duración mínima razonable de los segmentos de voz y silencio.
 
+		El silenci més curt que hem etiquetat és d'aproximadament 200 ms, novament deixarem un petit marge i establirem un llindar de 150 ms. 
+		El segment de veu de menor duració és de més o menys 1 segon, i tenint un marge d'error en compte, escollirm 600 ms de veu per etiquetar-lo com a tal.
+
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
+
+		Hem notat que en les transisions de segments de silenci a veu, és a dir a principi de paraules, hi sol haver pics en la tasde de creuements per zero. A més, aquest paràmetre és més aleatori i major en segments de silenci.
 
 
 ### Desarrollo del detector de actividad vocal
