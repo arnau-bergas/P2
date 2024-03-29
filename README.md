@@ -136,6 +136,7 @@ Ejercicios
   continuación, una captura de `wavesurfer` en la que se vea con claridad la señal temporal, el contorno de
   potencia y la tasa de cruces por cero, junto con el etiquetado manual de los segmentos.
 
+	![alt text](image.png)
 
 - A la vista de la gráfica, indique qué valores considera adecuados para las magnitudes siguientes:
 
@@ -146,8 +147,8 @@ Ejercicios
 
 	* Duración mínima razonable de los segmentos de voz y silencio.
 
-		El silenci més curt que hem etiquetat és d'aproximadament 200 ms, novament deixarem un petit marge i establirem un llindar de 150 ms. 
-		El segment de veu de menor duració és de més o menys 1 segon, i tenint un marge d'error en compte, escollirm 600 ms de veu per etiquetar-lo com a tal.
+		El silenci més curt que hem etiquetat és d'aproximadament 300 ms, novament deixarem un petit marge i establirem un llindar de 150 ms. 
+		El segment de veu de menor duració és de més o menys 300 ms, i tenint un marge d'error en compte, escollirm 150 ms de veu per etiquetar-lo com a tal.
 
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
 
