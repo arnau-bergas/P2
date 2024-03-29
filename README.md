@@ -148,7 +148,7 @@ Ejercicios
 	* Duración mínima razonable de los segmentos de voz y silencio.
 
 		El silenci més curt que hem etiquetat és d'aproximadament 300 ms, novament deixarem un petit marge i establirem un llindar de 150 ms. 
-		El segment de veu de menor duració és de més o menys 300 ms, i tenint un marge d'error en compte, escollirm 150 ms de veu per etiquetar-lo com a tal.
+		El segment de veu de menor duració és de més o menys 330 ms, i tenint un marge d'error en compte, escollirm 200 ms de veu per etiquetar-lo com a tal.
 
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
 
