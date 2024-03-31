@@ -17,9 +17,15 @@ typedef struct {
     int version;
     /* options with arguments */
     char *alpha1;
+    char *alpha2;
+    char *init_counter;
     char *input_wav;
+    char *min_silence;
+    char *min_voice;
     char *output_vad;
     char *output_wav;
+    char *zcr_stv;
+    char *zcr_vts;
     /* special */
     const char *usage_pattern;
     const char *help_message;
@@ -37,7 +43,13 @@ const char help_message[] =
 "   -i FILE, --input-wav=FILE   WAVE file for voice activity detection\n"
 "   -o FILE, --output-vad=FILE  Label file with the result of VAD\n"
 "   -w FILE, --output-wav=FILE  WAVE file with silences cleared\n"
-"   -1, REAL, --alpha1 REAL   alpha1 decisio veu silenci [default: 5]\n"
+"   -1 FLOAT, --alpha1=FLOAT    alpha1 parameter for VAD [default: 7.6]\n"
+"   -2 FLOAT, --alpha2=FLOAT    alpha2 parameter for VAD [default: 3.4]\n"
+"   -Z FLOAT, --zcr_stv=FLOAT     zcr parameter to voice for VAD [default: 3400]\n"
+"   -X FLOAT, --zcr_vts=FLOAT     zcr parameter to silence for VAD [default: 3600]\n"
+"   -V REAL, --min_voice=REAL     min frame to skip to voice  [default: 5]\n"
+"   -S REAL, --min_silence=REAL     min frame to skip to silence  [default: 5]\n"
+"   -I REAL, --init_counter=REAL   frames for background sound estimation  [default: 5]\n"
 "   -v, --verbose  Show debug information\n"
 "   -h, --help     Show this screen\n"
 "   --version      Show the version of the project\n"
@@ -275,15 +287,33 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
         } else if (!strcmp(option->olong, "--alpha1")) {
             if (option->argument)
                 args->alpha1 = option->argument;
+        } else if (!strcmp(option->olong, "--alpha2")) {
+            if (option->argument)
+                args->alpha2 = option->argument;
+        } else if (!strcmp(option->olong, "--init_counter")) {
+            if (option->argument)
+                args->init_counter = option->argument;
         } else if (!strcmp(option->olong, "--input-wav")) {
             if (option->argument)
                 args->input_wav = option->argument;
+        } else if (!strcmp(option->olong, "--min_silence")) {
+            if (option->argument)
+                args->min_silence = option->argument;
+        } else if (!strcmp(option->olong, "--min_voice")) {
+            if (option->argument)
+                args->min_voice = option->argument;
         } else if (!strcmp(option->olong, "--output-vad")) {
             if (option->argument)
                 args->output_vad = option->argument;
         } else if (!strcmp(option->olong, "--output-wav")) {
             if (option->argument)
                 args->output_wav = option->argument;
+        } else if (!strcmp(option->olong, "--zcr_stv")) {
+            if (option->argument)
+                args->zcr_stv = option->argument;
+        } else if (!strcmp(option->olong, "--zcr_vts")) {
+            if (option->argument)
+                args->zcr_vts = option->argument;
         }
     }
     /* commands */
@@ -304,7 +334,8 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
 
 DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
     DocoptArgs args = {
-        0, 0, 0, (char*) "5", NULL, NULL, NULL,
+        0, 0, 0, (char*) "7.6", (char*) "3.4", (char*) "5", NULL, (char*) "5",
+        (char*) "5", NULL, NULL, (char*) "3400", (char*) "3600",
         usage_pattern, help_message
     };
     Tokens ts;
@@ -317,11 +348,17 @@ DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
         {"-v", "--verbose", 0, 0, NULL},
         {NULL, "--version", 0, 0, NULL},
         {"-1", "--alpha1", 1, 0, NULL},
+        {"-2", "--alpha2", 1, 0, NULL},
+        {"-I", "--init_counter", 1, 0, NULL},
         {"-i", "--input-wav", 1, 0, NULL},
+        {"-S", "--min_silence", 1, 0, NULL},
+        {"-V", "--min_voice", 1, 0, NULL},
         {"-o", "--output-vad", 1, 0, NULL},
-        {"-w", "--output-wav", 1, 0, NULL}
+        {"-w", "--output-wav", 1, 0, NULL},
+        {"-Z", "--zcr_stv", 1, 0, NULL},
+        {"-X", "--zcr_vts", 1, 0, NULL}
     };
-    Elements elements = {0, 0, 7, commands, arguments, options};
+    Elements elements = {0, 0, 13, commands, arguments, options};
 
     ts = tokens_new(argc, argv);
     if (parse_args(&ts, &elements))
