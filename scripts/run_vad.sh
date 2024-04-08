@@ -4,11 +4,13 @@
 # Use the nautilus explorer or chmod +x run_vad.sh
 
 # Assigning alpha1 argument to a variable
-alpha1=${1:-5}
-alpha2=${2:-5}
-min_silence=${3:-0.1}
-min_voice=${4:-0}
-init_counter=${5:-0}
+alpha1=${1:-6.6}
+alpha2=${2:-5.9}
+zcr_stv=${3:-4000}
+zcr_vts=${4:-2400}
+min_silence=${5:-8}
+min_voice=${6:-9}
+init_counter=${7:-0}
 
 # Establecemos que el código de retorno de un pipeline sea el del último programa con código de retorno
 # distinto de cero, o cero si todos devuelven cero.
@@ -19,7 +21,6 @@ DIR_P2=$HOME/PAV/P2
 DB=$DIR_P2/db.v4
 CMD=$DIR_P2/bin/vad
 
-zcr_stv=3400 zcr_vts=3600
 
 for filewav in $DB/*/*wav; do
         echo "**************** $filewav ****************"
