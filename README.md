@@ -161,13 +161,34 @@ Ejercicios
   tiempo real tan exacto como sea posible. Tome como objetivo la maximización de la puntuación-F `TOTAL`.
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
-  automática conseguida para el fichero grabado al efecto. 
+  automática conseguida para el fichero grabado al efecto.
+
+    ![alt text](img/label.png)
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
+
+Observem com el nostre sistema ha introduït incorrectament una etiqueta de "Veu" a l'inici de la gravació. A més, les altres etiquetes no s'ajusten completament a la perfecció.
+
 
 - Evalúe los resultados sobre la base de datos `db.v4` con el script `vad_evaluation.pl` e inserte a 
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
+
+  A partir del nostre script personalitzar que cerca els millors paràmetres, hem obtingut per la base de dades els següents paràmetres:
+
+  ```.sh
+	Best total value: 94.129
+	Best parameters: alpha1=6.6, alpha2=5.9, zcr_stv=4000, zcr_vts=2400,min_silence=8, min_voice=9, init_counter=0
+  ```
+
+  Executan `run_vad.sh` obtenim:
+
+  ```.sh
+	**************** Summary ****************
+	Recall V:481.82/495.55 97.23%   Precision V:481.82/534.67 90.12%   F-score V (2)  : 95.72%
+	Recall S:268.32/321.17 83.54%   Precision S:268.32/282.05 95.13%   F-score S (1/2): 92.57%
+	===> TOTAL: 94.129%
+	```
 
 
 ### Trabajos de ampliación
@@ -187,10 +208,55 @@ Ejercicios
   una captura de pantalla en la que se vea el mensaje de ayuda del programa.
 
 
+  	![alt text](img/doc.png)
+
 ### Contribuciones adicionales y/o comentarios acerca de la práctica
 
 - Indique a continuación si ha realizado algún tipo de aportación suplementaria (algoritmos de detección o 
   parámetros alternativos, etc.).
+
+  Per trobar els paràmetres òptims per avaluar la base de dades, hem creat un script senzill (scripts/all_run_vad.sh) que, amb uns límits (màxim i mínim) i un valor d'increment per a cada un dels 5 paràmetres, explora totes les combinacions possibles i mostra la millor opció a la pantalla.
+
+	```.sh
+	#! /bin/bash
+
+	best_total=0
+	best_alpha1=0
+	best_alpha2=0
+	best_min_silence=0
+	best_min_voice=0
+	best_init_counter=0
+
+	init_counter=12
+
+	for alpha1 in $(seq 6 1 10); do
+		for alpha2 in $(seq 0 1 4); do
+			for min_silence in $(seq 0 2 10); do
+				for min_voice in $(seq 0 2 10); do
+						alpha1_dot=$(echo "$alpha1" | tr ',' '.')
+						alpha2_dot=$(echo "$alpha2" | tr ',' '.')
+						echo -n "alpha1=$alpha1, alpha2=$alpha2, min_silence=$min_silence, min_voice=$min_voice, init_counter=$init_counter   RESULT:"
+						total=$(scripts/run_vad.sh $alpha1_dot $alpha2_dot $min_silence $min_voice $init_counter | grep TOTAL | awk '{print $3}' | tr -d '%')
+						echo "$total%"
+
+						if (( $(echo "$total > $best_total" | bc -l) )); then
+							best_total=$total
+							best_alpha1=$alpha1
+							best_alpha2=$alpha2
+							best_min_silence=$min_silence
+							best_min_voice=$min_voice
+							best_init_counter=$init_counter
+						fi
+	done done done done
+
+	echo "Best total value: $best_total"
+	echo "Best parameters: alpha1=$best_alpha1, alpha2=$best_alpha2, min_silence=$best_min_silence, min_voice=$best_min_voice, init_counter=$best_init_counter"	
+	```
+
+
+
+
+
 
 - Si lo desea, puede realizar también algún comentario acerca de la realización de la práctica que
   considere de interés de cara a su evaluación.
